@@ -1,6 +1,6 @@
 
-import UseCaseInterface from "./use-case.interface"
+import UsecaseInterface from "./use-case.interface"
 
 export {
-  UseCaseInterface
+  UsecaseInterface
 }

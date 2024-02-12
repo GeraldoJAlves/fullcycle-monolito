@@ -11,7 +11,7 @@ const makeSut = () => {
   };
 };
 
-describe("AddProductUsecase tests", () => {
+describe("AddProduct usecase", () => {
   it("should add a product", async () => {
     const { sut, productRepositorySpy } = makeSut();
 
