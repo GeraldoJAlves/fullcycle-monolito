@@ -1,8 +1,6 @@
 import { Id } from "@/modules/@shared/domain/value-object";
-import {
-  Product,
-  ProductRepositoryInterface,
-} from "@/modules/product-adm/domain";
+import { Product } from "@/modules/product-adm/domain";
+import { ProductGatewayInterface } from "@/modules/product-adm/gateway";
 
 const productBall = new Product({
   name: "bike",
@@ -11,9 +9,7 @@ const productBall = new Product({
   stock: 9,
 });
 
-export default class ProductRepositorySpy
-  implements ProductRepositoryInterface
-{
+export default class ProductRepositorySpy implements ProductGatewayInterface {
   inputAdd: Product | undefined;
   inputFind: Id | undefined;
   outputFind = productBall;
