@@ -15,7 +15,7 @@ export default class AddProductUsecase {
     await this.repository.add(product)
 
     return {
-      id: product.getId().getId(),
+      id: product.getId().getValue(),
       name: product.getName(),
       description: product.getDescription(),
       purchasePrice: product.getPurchasePrice(),
