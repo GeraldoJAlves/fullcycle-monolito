@@ -16,5 +16,5 @@ export interface AddProductFacadeOutputDTO {
 }
 
 export interface ProductAdmFacadeInterface {
-  addProduct(input: AddProductFacadeInputDTO): Promise<void>;
+  addProduct(input: AddProductFacadeInputDTO): Promise<AddProductFacadeOutputDTO>;
 }
