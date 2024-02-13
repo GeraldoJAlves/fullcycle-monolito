@@ -1,5 +1,4 @@
-import CheckStockUsecase from "./check-stock.usecase"
+import CheckStockUsecase from "./check-stock.usecase";
+import { CheckStockInputDTO, CheckStockOutputDTO } from "./check-stock.dto";
 
-export {
-  CheckStockUsecase
-}
+export { CheckStockInputDTO, CheckStockOutputDTO, CheckStockUsecase };

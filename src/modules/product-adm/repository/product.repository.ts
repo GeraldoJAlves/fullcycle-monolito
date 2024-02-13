@@ -4,6 +4,7 @@ import { ProductGatewayInterface } from "@/modules/product-adm/gateway";
 import { ProductModel } from "./product.model";
 
 export default class ProductRepository implements ProductGatewayInterface {
+
   async add(product: Product) {
     await ProductModel.create({
       id: product.getId().getValue(),
@@ -15,6 +16,7 @@ export default class ProductRepository implements ProductGatewayInterface {
       updatedAt: product.getUpdatedAt(),
     });
   }
+
   async find(id: Id) {
     const product = await ProductModel.findOne({
       where: { id: id.getValue() },

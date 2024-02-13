@@ -1,3 +1,3 @@
-import ProductGatewayInterface from "./product.gateway";
+import ProductGatewayInterface from "./product.gateway.interface";
 
 export { ProductGatewayInterface };

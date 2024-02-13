@@ -46,4 +46,44 @@ describe("Product repository", () => {
     expect(productDb?.purchasePrice).toEqual(product.getPurchasePrice());
     expect(productDb?.stock).toEqual(product.getStock());
   });
+
+  it("should find a product", async () => {
+    const productProps = {
+      id: new Id("1"),
+      name: "Product 1",
+      description: "Product 1 description",
+      purchasePrice: 100,
+      stock: 10,
+    };
+
+    const product = new Product(productProps);
+
+    await ProductModel.create({
+      id: product.getId().getValue(),
+      name: product.getName(),
+      description: product.getDescription(),
+      purchasePrice: product.getPurchasePrice(),
+      stock: product.getStock(),
+      createdAt: product.getCreatedAt(),
+      updatedAt: product.getUpdatedAt(),
+    });
+
+    const productRepository = new ProductRepository();
+
+    const productOutput = await productRepository.find(product.getId())
+
+    expect(productOutput).toEqual(product)
+  });
+
+
+  it("should return error when product not found", async() => {
+    const id = new Id('Id not found')
+    const productRepository = new ProductRepository();
+
+    await expect(async () => {
+      await productRepository.find(id)
+    }).rejects.toThrow(new Error(`Product with id ${id.getValue()} not found`))
+
+
+  })
 });
