@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run tsc && jest",
+    "coverage": "npm run test -- --coverage",
     "tsc": "tsc"
   },
   "keywords": [],
