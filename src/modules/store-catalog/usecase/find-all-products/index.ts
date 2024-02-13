@@ -3,4 +3,10 @@ import {
   FindAllProductsOutputDTO,
 } from "./find-all-products.dto";
 
-export { FindAllProductsInputDTO, FindAllProductsOutputDTO };
+import FindAllProductsUsecase from "./find-all-products.usecase";
+
+export {
+  FindAllProductsInputDTO,
+  FindAllProductsOutputDTO,
+  FindAllProductsUsecase,
+};
