@@ -1,8 +1,9 @@
 import { Product } from "@/modules/product-adm/domain";
 import { AddProductInputDTO, AddProductOutputDTO } from "./add-product.dto";
 import { ProductGatewayInterface } from "@/modules/product-adm/gateway";
+import { UsecaseInterface } from "@/modules/@shared/usecase";
 
-export default class AddProductUsecase {
+export default class AddProductUsecase implements UsecaseInterface {
   constructor(private repository: ProductGatewayInterface) {}
 
   async execute(input: AddProductInputDTO): Promise<AddProductOutputDTO> {
