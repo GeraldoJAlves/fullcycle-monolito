@@ -17,7 +17,7 @@ export default class AddClientUsecase implements UsecaseInterface {
       email: input.email,
       address: input.address,
     });
-    await this.repository.create(client);
+    await this.repository.add(client);
 
     return {
       id: client.getId().getValue(),

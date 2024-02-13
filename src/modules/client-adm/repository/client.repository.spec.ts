@@ -22,7 +22,7 @@ describe("Client repository", () => {
     await sequelize.close();
   });
 
-  describe("create()", () => {
+  describe("add()", () => {
     it("should create a client", async () => {
       const client = new Client({
         name: "Alexander",
@@ -32,7 +32,7 @@ describe("Client repository", () => {
 
       const repository = new ClientRepository();
 
-      await repository.create(client);
+      await repository.add(client);
 
       const clientDb = await ClientModel.findOne({
         where: { id: client.getId().getValue() },

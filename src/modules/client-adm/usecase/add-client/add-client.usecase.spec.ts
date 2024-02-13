@@ -4,7 +4,7 @@ import { ClientGatewayInterface } from "../../gateway";
 import AddClientUsecase from "./add-client.usecase";
 
 class ClientRepository implements ClientGatewayInterface {
-  create(client: Client): Promise<void> {
+  add(client: Client): Promise<void> {
     throw new Error("Method not implemented.");
   }
   find(id: Id): Promise<Client> {
@@ -27,7 +27,7 @@ describe("AddClient usecase", () => {
       address: "main street, city B",
     };
 
-    const repositorySpy = jest.spyOn(repository, "create").mockResolvedValueOnce();
+    const repositorySpy = jest.spyOn(repository, "add").mockResolvedValueOnce();
 
     const response = await usecase.execute(input);
 
@@ -46,7 +46,7 @@ describe("AddClient usecase", () => {
       address: "main street, city B",
     };
 
-    jest.spyOn(repository, "create").mockResolvedValueOnce();
+    jest.spyOn(repository, "add").mockResolvedValueOnce();
 
     const response = await usecase.execute(input);
 

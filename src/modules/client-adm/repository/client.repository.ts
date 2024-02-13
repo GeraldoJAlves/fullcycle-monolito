@@ -4,7 +4,7 @@ import { ClientGatewayInterface } from "@/modules/client-adm/gateway";
 import ClientModel from "./client.model";
 
 export default class ClientRepository implements ClientGatewayInterface {
-  async create(client: Client): Promise<void> {
+  async add(client: Client): Promise<void> {
     await ClientModel.create({
       id: client.getId().getValue(),
       name: client.getName(),

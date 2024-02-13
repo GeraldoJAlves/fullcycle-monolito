@@ -4,7 +4,7 @@ import { ClientGatewayInterface } from "../../gateway";
 import FindClientUsecase from "./find-client.usecase";
 
 class ClientRepository implements ClientGatewayInterface {
-  create(client: Client): Promise<void> {
+  add(client: Client): Promise<void> {
     throw new Error("Method not implemented.");
   }
   find(id: Id): Promise<Client> {
