@@ -40,10 +40,10 @@ describe("Product repository", () => {
     });
 
     expect(productDb).toBeDefined();
-    expect(productDb?.getDataValue('id')).toEqual(product.getId().getValue());
-    expect(productDb?.getDataValue('name')).toEqual(product.getName());
-    expect(productDb?.getDataValue('description')).toEqual(product.getDescription());
-    expect(productDb?.getDataValue('purchasePrice')).toEqual(product.getPurchasePrice());
-    expect(productDb?.getDataValue('stock')).toEqual(product.getStock());
+    expect(productDb?.id).toEqual(product.getId().getValue());
+    expect(productDb?.name).toEqual(product.getName());
+    expect(productDb?.description).toEqual(product.getDescription());
+    expect(productDb?.purchasePrice).toEqual(product.getPurchasePrice());
+    expect(productDb?.stock).toEqual(product.getStock());
   });
 });
