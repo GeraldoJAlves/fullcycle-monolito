@@ -13,15 +13,15 @@ export default class ProductAdmFacade implements ProductAdmFacadeInterface {
     private checkStockUsecase: UsecaseInterface
   ) {}
 
-  async addProduct(
+  addProduct(
     input: AddProductFacadeInputDTO
   ): Promise<AddProductFacadeOutputDTO> {
-    return await this.addProductUsecase.execute(input);
+    return this.addProductUsecase.execute(input);
   }
 
   checkStock(
     input: CheckStockFacadeInputDTO
   ): Promise<CheckStockFacadeOutputDTO> {
-    throw new Error("Method not implemented.");
+    return this.checkStockUsecase.execute(input)
   }
 }
