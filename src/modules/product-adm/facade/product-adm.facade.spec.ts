@@ -2,6 +2,21 @@ import { ProductRepository } from "@/modules/product-adm/repository";
 import { AddProductUsecase } from "@/modules/product-adm/usecase/add-product";
 import ProductAdmFacade from "./product-adm.facade";
 import { AddProductFacadeInputDTO } from "./product-adm.facade.interface";
+import { CheckStockUsecase } from "@/modules/product-adm/usecase/check-stock";
+
+const makeSut = () => {
+  const repository = new ProductRepository();
+  const addProductUsecase = new AddProductUsecase(repository);
+  const checkStockUsecase = new CheckStockUsecase(repository);
+
+  const sut = new ProductAdmFacade(addProductUsecase, checkStockUsecase);
+
+  return {
+    addProductUsecase,
+    checkStockUsecase,
+    sut,
+  };
+};
 
 describe("ProductAdm facade", () => {
   beforeEach(() => {
@@ -10,8 +25,7 @@ describe("ProductAdm facade", () => {
 
   describe("addProduct", () => {
     it("should call addProductUseCase", async () => {
-      const repository = new ProductRepository();
-      const usecase = new AddProductUsecase(repository);
+      const {sut, addProductUsecase} = makeSut()
 
       const input: AddProductFacadeInputDTO = {
         name: "toy car",
@@ -28,10 +42,8 @@ describe("ProductAdm facade", () => {
       };
 
       const usecaseSpy = jest
-        .spyOn(usecase, "execute")
+        .spyOn(addProductUsecase, "execute")
         .mockResolvedValueOnce(output);
-
-      const sut = new ProductAdmFacade(usecase);
 
       const response = await sut.addProduct(input);
 
@@ -40,8 +52,7 @@ describe("ProductAdm facade", () => {
     });
 
     it("should throw if AddProductUsecase throws", async () => {
-      const repository = new ProductRepository();
-      const usecase = new AddProductUsecase(repository);
+      const {sut, addProductUsecase} = makeSut()
 
       const input: AddProductFacadeInputDTO = {
         name: "toy car",
@@ -51,10 +62,8 @@ describe("ProductAdm facade", () => {
       };
 
       jest
-        .spyOn(usecase, "execute")
+        .spyOn(addProductUsecase, "execute")
         .mockRejectedValue(new Error("usecase error"));
-
-      const sut = new ProductAdmFacade(usecase);
 
       expect(async () => {
         await sut.addProduct(input);

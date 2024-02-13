@@ -15,6 +15,20 @@ export interface AddProductFacadeOutputDTO {
   updatedAt: Date;
 }
 
+export interface CheckStockFacadeInputDTO {
+  id: string;
+}
+
+export interface CheckStockFacadeOutputDTO {
+  id: string;
+  stock: number;
+}
+
 export interface ProductAdmFacadeInterface {
-  addProduct(input: AddProductFacadeInputDTO): Promise<AddProductFacadeOutputDTO>;
+  addProduct(
+    input: AddProductFacadeInputDTO
+  ): Promise<AddProductFacadeOutputDTO>;
+  checkStock(
+    input: CheckStockFacadeInputDTO
+  ): Promise<CheckStockFacadeOutputDTO>;
 }
