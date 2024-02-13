@@ -1,7 +1,6 @@
 import { ProductRepository } from "@/modules/product-adm/repository";
 import { AddProductUsecase } from "@/modules/product-adm/usecase/add-product";
 import ProductAdmFacade from "./product-adm.facade";
-import { AddProductFacadeInputDTO } from "./product-adm.facade.interface";
 import { CheckStockUsecase } from "@/modules/product-adm/usecase/check-stock";
 
 const makeSut = () => {
@@ -23,11 +22,11 @@ describe("ProductAdm facade", () => {
     jest.clearAllMocks();
   });
 
-  describe("addProduct", () => {
-    it("should call addProductUseCase", async () => {
-      const {sut, addProductUsecase} = makeSut()
+  describe("addProduct()", () => {
+    it("should call addProductUsecase", async () => {
+      const { sut, addProductUsecase } = makeSut();
 
-      const input: AddProductFacadeInputDTO = {
+      const input = {
         name: "toy car",
         description: "purple car",
         purchasePrice: 10000,
@@ -52,9 +51,9 @@ describe("ProductAdm facade", () => {
     });
 
     it("should throw if AddProductUsecase throws", async () => {
-      const {sut, addProductUsecase} = makeSut()
+      const { sut, addProductUsecase } = makeSut();
 
-      const input: AddProductFacadeInputDTO = {
+      const input = {
         name: "toy car",
         description: "purple car",
         purchasePrice: 10000,
@@ -67,6 +66,46 @@ describe("ProductAdm facade", () => {
 
       expect(async () => {
         await sut.addProduct(input);
+      }).rejects.toThrow("usecase error");
+    });
+  });
+
+  describe("checkStock()", () => {
+    it("should call checkStockUsecase", async () => {
+      const { sut, checkStockUsecase } = makeSut();
+
+      const input = {
+        id: "product 3",
+      };
+
+      const output = {
+        ...input,
+        stock: 8,
+      };
+
+      const usecaseSpy = jest
+        .spyOn(checkStockUsecase, "execute")
+        .mockResolvedValueOnce(output);
+
+      const response = await sut.checkStock(input);
+
+      expect(response).toEqual(output);
+      expect(usecaseSpy).toHaveBeenCalled();
+    });
+
+    it("should throw if CheckStockUsecase throws", async () => {
+      const { sut, checkStockUsecase } = makeSut();
+
+      const input = {
+        id: "product 1",
+      };
+
+      jest
+        .spyOn(checkStockUsecase, "execute")
+        .mockRejectedValue(new Error("usecase error"));
+
+      expect(async () => {
+        await sut.checkStock(input);
       }).rejects.toThrow("usecase error");
     });
   });
