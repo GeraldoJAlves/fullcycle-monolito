@@ -22,6 +22,10 @@ const makeSut = () => {
 };
 
 describe("FindAllProducts usecase", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("should call product repository", async () => {
     const { sut, repositorySpy } = makeSut();
 
