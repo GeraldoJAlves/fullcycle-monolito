@@ -12,7 +12,7 @@ const makeSut = () => {
 };
 
 describe("CheckStock usecase", () => {
-  it("should create a product", async () => {
+  it("should find a product", async () => {
     const { sut, productRepositorySpy } = makeSut();
 
     const input = {
