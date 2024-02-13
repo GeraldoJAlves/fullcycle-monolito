@@ -1,10 +1,8 @@
 import { Sequelize } from "sequelize-typescript";
-import { ProductAdmFacade } from "../facade";
-import { ProductModel } from "../repository/product.model";
+import { ProductModel } from "@/modules/product-adm/repository/product.model";
 import ProductAdmFacadeFactory from "./facade.factory"
 
 describe("ProductAdmFacade factory", () => {
-
   let sequelize: Sequelize;
 
   beforeEach(async () => {
