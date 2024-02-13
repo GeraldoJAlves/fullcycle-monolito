@@ -27,12 +27,13 @@ describe("AddClient usecase", () => {
       address: "main street, city B",
     };
 
-    jest.spyOn(repository, "create").mockResolvedValueOnce();
+    const repositorySpy = jest.spyOn(repository, "create").mockResolvedValueOnce();
 
     const response = await usecase.execute(input);
 
     expect(response.id).toBeDefined();
     expect(response.name).toBe(input.name);
+    expect(repositorySpy).toHaveBeenCalled()
   });
 
   it("should throw if ClientRepository throws", async () => {
