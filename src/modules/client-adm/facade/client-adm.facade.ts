@@ -1,8 +1,8 @@
 import ClientAdmFacadeInterface, {
-  AddClientAdmFacadeInputDTO,
-  AddClientAdmFacadeOutputDTO,
-  FindClientAdmFacadeInputDTO,
-  FindClientAdmFacadeOutputDTO,
+  AddClientFacadeInputDTO,
+  AddClientFacadeOutputDTO,
+  FindClientFacadeInputDTO,
+  FindClientFacadeOutputDTO,
 } from "./client-adm.facade.interface";
 import { AddClientUsecase } from "../usecase/add-client";
 import { FindClientUsecase } from "../usecase/find-client";
@@ -14,14 +14,14 @@ export default class ClientAdmFacade implements ClientAdmFacadeInterface {
   ) {}
 
   add(
-    input: AddClientAdmFacadeInputDTO
-  ): Promise<AddClientAdmFacadeOutputDTO> {
+    input: AddClientFacadeInputDTO
+  ): Promise<AddClientFacadeOutputDTO> {
     return this.addClientUsecase.execute(input)
   }
 
   find(
-    input: FindClientAdmFacadeInputDTO
-  ): Promise<FindClientAdmFacadeOutputDTO> {
+    input: FindClientFacadeInputDTO
+  ): Promise<FindClientFacadeOutputDTO> {
     return this.findClientUsecase.execute(input)
   }
 }

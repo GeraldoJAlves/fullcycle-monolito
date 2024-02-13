@@ -1,17 +1,17 @@
 import ClientAdmFacade from "./client-adm.facade";
 
 import ClientAdmFacadeInterface, {
-  AddClientAdmFacadeInputDTO,
-  AddClientAdmFacadeOutputDTO,
-  FindClientAdmFacadeInputDTO,
-  FindClientAdmFacadeOutputDTO,
+  AddClientFacadeInputDTO,
+  AddClientFacadeOutputDTO,
+  FindClientFacadeInputDTO,
+  FindClientFacadeOutputDTO,
 } from "./client-adm.facade.interface";
 
 export {
   ClientAdmFacade,
   ClientAdmFacadeInterface,
-  AddClientAdmFacadeInputDTO,
-  AddClientAdmFacadeOutputDTO,
-  FindClientAdmFacadeInputDTO,
-  FindClientAdmFacadeOutputDTO,
+  AddClientFacadeInputDTO,
+  AddClientFacadeOutputDTO,
+  FindClientFacadeInputDTO,
+  FindClientFacadeOutputDTO,
 };

@@ -1,8 +1,8 @@
-export interface FindClientAdmFacadeInputDTO {
+export interface FindClientFacadeInputDTO {
   id: string;
 }
 
-export interface FindClientAdmFacadeOutputDTO {
+export interface FindClientFacadeOutputDTO {
   id: string;
   name: string;
   email: string;
@@ -11,13 +11,13 @@ export interface FindClientAdmFacadeOutputDTO {
   updatedAt: Date;
 }
 
-export interface AddClientAdmFacadeInputDTO {
+export interface AddClientFacadeInputDTO {
   name: string;
   email: string;
   address: string;
 }
 
-export interface AddClientAdmFacadeOutputDTO {
+export interface AddClientFacadeOutputDTO {
   id: string;
   name: string;
   email: string;
@@ -27,8 +27,8 @@ export interface AddClientAdmFacadeOutputDTO {
 }
 
 export default interface ClientAdmFacadeInterface {
-  add(input: AddClientAdmFacadeInputDTO): Promise<AddClientAdmFacadeOutputDTO>;
+  add(input: AddClientFacadeInputDTO): Promise<AddClientFacadeOutputDTO>;
   find(
-    input: FindClientAdmFacadeInputDTO
-  ): Promise<FindClientAdmFacadeOutputDTO>;
+    input: FindClientFacadeInputDTO
+  ): Promise<FindClientFacadeOutputDTO>;
 }
