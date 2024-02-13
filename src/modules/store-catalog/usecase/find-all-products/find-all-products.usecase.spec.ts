@@ -27,7 +27,7 @@ describe("FindAllProducts usecase", () => {
   });
 
   it("should call product repository", async () => {
-    const { sut, repositorySpy } = makeSut();
+    const { sut, repositorySpy:repository } = makeSut();
 
     const products = [
       new Product({
@@ -44,7 +44,7 @@ describe("FindAllProducts usecase", () => {
       }),
     ];
 
-    jest.spyOn(repositorySpy, "findAll").mockResolvedValue(products);
+    const repositorySpy = jest.spyOn(repository, "findAll").mockResolvedValue(products);
 
     const response = await sut.execute({});
 
@@ -62,9 +62,10 @@ describe("FindAllProducts usecase", () => {
       description: "description 2",
       salesPrice: 3.91,
     });
+    expect(repositorySpy).toHaveBeenCalled()
   });
 
-  it("should call product repository", async () => {
+  it("should throws if product repository throw", async () => {
     const { sut, repositorySpy } = makeSut();
 
     jest
