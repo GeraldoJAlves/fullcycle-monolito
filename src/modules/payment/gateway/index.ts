@@ -1,3 +1,3 @@
-import PaymentGatewayInterface from "./payment.gateway.interface";
+import TransactionGatewayInterface from "./transaction.gateway.interface";
 
-export { PaymentGatewayInterface };
+export { TransactionGatewayInterface };

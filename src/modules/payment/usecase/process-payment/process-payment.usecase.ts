@@ -1,13 +1,13 @@
 import { UsecaseInterface } from "@/modules/@shared/usecase";
 import { Transaction } from "@/modules/payment/domain";
-import { PaymentGatewayInterface } from "@/modules/payment/gateway";
+import { TransactionGatewayInterface } from "@/modules/payment/gateway";
 import {
   ProcessPaymentInputDTO,
   ProcessPaymentOutputDTO,
 } from "./process-payment.dto";
 
 export default class ProcessPaymentUsecase implements UsecaseInterface {
-  constructor(private readonly repository: PaymentGatewayInterface) {}
+  constructor(private readonly repository: TransactionGatewayInterface) {}
 
   async execute(
     input: ProcessPaymentInputDTO

@@ -1,8 +1,8 @@
 import { StatusTypes, Transaction } from "../../domain";
-import { PaymentGatewayInterface } from "../../gateway";
+import { TransactionGatewayInterface } from "../../gateway";
 import ProcessPaymentUsecase from "./process-payment.usecase";
 
-class PaymentRepository implements PaymentGatewayInterface {
+class TransactionRepository implements TransactionGatewayInterface {
   save(transaction: Transaction): Promise<Transaction> {
     throw new Error("Method not implemented.");
   }
@@ -10,7 +10,7 @@ class PaymentRepository implements PaymentGatewayInterface {
 
 describe("ProcessPayment usecase", () => {
   it("should call PaymentRepository", async () => {
-    const repository = new PaymentRepository();
+    const repository = new TransactionRepository();
     const usecase = new ProcessPaymentUsecase(repository);
 
     const transaction = new Transaction({
@@ -34,7 +34,7 @@ describe("ProcessPayment usecase", () => {
   });
 
   it("should throw if PaymentRepository throws", async () => {
-    const repository = new PaymentRepository();
+    const repository = new TransactionRepository();
     const usecase = new ProcessPaymentUsecase(repository);
 
     jest
