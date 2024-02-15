@@ -32,9 +32,8 @@ describe("Invoice entity", () => {
     expect(invoice.getDocument()).toBe("x123");
     expect(invoice.getAddress()).toEqual(address);
     expect(invoice.getItems()).toEqual(items);
-    expect(invoice.getTotalItems()).toEqual(60);
+    expect(invoice.getTotal()).toEqual(60);
     expect(invoice.getCreatedAt()).toBeDefined();
-    expect(invoice.getUpdatedAt()).toBeDefined();
   });
 
   it("should throw if an empty list of InvoiceItem is provided", () => {
