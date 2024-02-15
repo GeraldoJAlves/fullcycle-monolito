@@ -1,9 +1,8 @@
 import { Id } from "@/modules/@shared/domain/value-object";
 import { InvoiceGatewayInterface } from "@/modules/invoice/gateway";
 import { Invoice } from "@/modules/invoice/domain";
+import { InvoiceFactory } from "@/modules/invoice/factory";
 import FindInvoiceUsecase from "./find-invoice.usecase";
-import InvoiceItem from "../../domain/invoice-items.enitty";
-import { Address } from "../../value-object";
 
 class InvoiceRepository implements InvoiceGatewayInterface {
   find(invoiceId: Id): Promise<Invoice> {
@@ -19,26 +18,30 @@ describe("FindInvoice usecase", () => {
     const repository = new InvoiceRepository();
     const usecase = new FindInvoiceUsecase(repository);
 
-    const address = new Address(
-      "street 2",
-      "30",
-      "none",
-      "city M",
-      "WC",
-      "999-99"
-    );
-
-    const items = [
-      new InvoiceItem({ name: "item 1", price: 10 }),
-      new InvoiceItem({ name: "item 2", price: 20 }),
-      new InvoiceItem({ name: "item 3", price: 30 }),
-    ];
-
-    const invoice = new Invoice({
+    const invoice = InvoiceFactory.create({
       name: "December",
       document: "x123",
-      address,
-      items,
+      street: "street 2",
+      number: "40",
+      complement: "house",
+      city: "city B",
+      state: "AM",
+      zipCode: "9999-99",
+      items: [
+        {
+          name: "item 1",
+          price: 10,
+        },
+        {
+          name: "item 2",
+          price: 20,
+        },
+
+        {
+          name: "item 3",
+          price: 30,
+        },
+      ],
     });
 
     const repositorySpy = jest
@@ -46,6 +49,7 @@ describe("FindInvoice usecase", () => {
       .mockResolvedValueOnce(invoice);
 
     const input = { id: invoice.getId().getValue() };
+
     const response = await usecase.execute(input);
 
     expect(repositorySpy).toHaveBeenCalledWith(input);
