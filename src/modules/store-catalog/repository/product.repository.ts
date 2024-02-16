@@ -1,6 +1,6 @@
 import { Id } from "@/modules/@shared/domain/value-object";
-import { Product } from "../domain";
-import { ProductGatewayInterface } from "../gateway";
+import { Product } from "@/modules/store-catalog/domain";
+import { ProductGatewayInterface } from "@/modules/store-catalog/gateway";
 import ProductModel from "./product.model";
 
 export default class ProductRepository implements ProductGatewayInterface {
