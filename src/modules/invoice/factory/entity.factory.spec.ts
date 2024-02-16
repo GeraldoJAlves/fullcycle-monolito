@@ -1,6 +1,6 @@
 import { Id } from "@/modules/@shared/domain/value-object";
+import { Address } from "@/modules/invoice/value-object";
 import InvoiceFactory from "./entity.factory";
-import { Address } from "../value-object";
 
 describe("Invoice factory", () => {
   it("should create an invoice", () => {
