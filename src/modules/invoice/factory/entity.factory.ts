@@ -21,6 +21,8 @@ type InvoiceFactoryProps = {
 };
 
 export default class InvoiceFactory {
+  private constructor() {}
+
   static create(props: InvoiceFactoryProps) {
     const items: InvoiceItem[] = [];
     for (const item of props.items) {
