@@ -1,7 +1,7 @@
-import { ClientAdmFacade } from "../facade";
-import { ClientRepository } from "../repository";
-import { AddClientUsecase } from "../usecase/add-client";
-import { FindClientUsecase } from "../usecase/find-client";
+import { ClientAdmFacade } from "@/modules/client-adm/facade";
+import { ClientRepository } from "@/modules/client-adm/repository";
+import { AddClientUsecase } from "@/modules/client-adm/usecase/add-client";
+import { FindClientUsecase } from "@/modules/client-adm/usecase/find-client";
 
 export default class ClientAdmFacadeFactory {
   static create () {

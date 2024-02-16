@@ -1,6 +1,6 @@
-import { ClientRepository } from "../repository";
-import { AddClientUsecase } from "../usecase/add-client";
-import { FindClientUsecase } from "../usecase/find-client";
+import { ClientRepository } from "@/modules/client-adm/repository";
+import { AddClientUsecase } from "@/modules/client-adm/usecase/add-client";
+import { FindClientUsecase } from "@/modules/client-adm/usecase/find-client";
 import ClientAdmFacade from "./client-adm.facade";
 
 const makeSut = () => {

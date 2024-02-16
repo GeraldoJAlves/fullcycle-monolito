@@ -1,6 +1,6 @@
 import { Id } from "@/modules/@shared/domain/value-object";
-import { Client } from "../../domain";
-import { ClientGatewayInterface } from "../../gateway";
+import { Client } from "@/modules/client-adm/domain";
+import { ClientGatewayInterface } from "@/modules/client-adm/gateway";
 import AddClientUsecase from "./add-client.usecase";
 
 class ClientRepository implements ClientGatewayInterface {

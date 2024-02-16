@@ -1,6 +1,5 @@
 import { Sequelize } from "sequelize-typescript";
-import { ClientModel, ClientRepository } from "../repository";
-import { Client } from "../domain";
+import { ClientModel } from "@/modules/client-adm/repository";
 import ClientAdmFacadeFactory from "./facade.factory";
 
 describe("ClientAdmFacade factory", () => {

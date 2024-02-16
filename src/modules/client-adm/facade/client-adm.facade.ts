@@ -1,11 +1,11 @@
+import { AddClientUsecase } from "@/modules/client-adm/usecase/add-client";
+import { FindClientUsecase } from "@/modules/client-adm/usecase/find-client";
 import ClientAdmFacadeInterface, {
   AddClientFacadeInputDTO,
   AddClientFacadeOutputDTO,
   FindClientFacadeInputDTO,
   FindClientFacadeOutputDTO,
 } from "./client-adm.facade.interface";
-import { AddClientUsecase } from "../usecase/add-client";
-import { FindClientUsecase } from "../usecase/find-client";
 
 export default class ClientAdmFacade implements ClientAdmFacadeInterface {
   constructor(
