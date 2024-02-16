@@ -3,7 +3,7 @@ import { Invoice, InvoiceItem } from "@/modules/invoice/domain";
 import { Address } from "@/modules/invoice/value-object";
 
 type InvoiceFactoryProps = {
-  id?: string
+  id?: string;
   name: string;
   document: string;
   street: string;
@@ -17,10 +17,11 @@ type InvoiceFactoryProps = {
     name: string;
     price: number;
   }[];
-}
+  createdAt?: Date;
+};
 
 export default class InvoiceFactory {
-  static create (props: InvoiceFactoryProps) {
+  static create(props: InvoiceFactoryProps) {
     const items: InvoiceItem[] = [];
     for (const item of props.items) {
       items.push(
@@ -47,6 +48,7 @@ export default class InvoiceFactory {
       document: props.document,
       address,
       items,
+      createdAt: props.createdAt
     });
   }
 }
