@@ -3,6 +3,7 @@ import { InvoiceFactory } from "@/modules/invoice/factory";
 import InvoiceItemModel from "./invoice-item.model";
 import InvoiceModel from "./invoice.model";
 import InvoiceRepository from "./invoice.repository";
+import { Id } from "@/modules/@shared/domain/value-object";
 
 describe("Invoice repository", () => {
   let sequelize: Sequelize;
@@ -75,6 +76,14 @@ describe("Invoice repository", () => {
 
       expect(invoiceOutput).toBeDefined();
       expect(invoiceOutput.getTotal()).toBe(65);
+    });
+
+    it("should throw if invoice does not exist", async () => {
+      const repository = new InvoiceRepository();
+
+      await expect(async () => {
+        await repository.find(new Id("23"));
+      }).rejects.toThrow("Invoice with id 23 not found");
     });
   });
 
