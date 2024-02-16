@@ -1,4 +1,4 @@
-import { ProductRepositorySpy } from "../test";
+import { ProductRepositorySpy } from "@/modules/product-adm/usecase/test";
 import CheckStockUsecase from "./check-stock.usecase";
 
 const makeSut = () => {

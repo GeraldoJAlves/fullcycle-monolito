@@ -1,4 +1,4 @@
-import { ProductRepositorySpy } from "../test";
+import { ProductRepositorySpy } from "@/modules/product-adm/usecase/test";
 import AddProductUsecase from "./add-product.usecase";
 
 const makeSut = () => {
