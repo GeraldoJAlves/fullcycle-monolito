@@ -1,5 +1,5 @@
-import { StatusTypes, Transaction } from "../../domain";
-import { TransactionGatewayInterface } from "../../gateway";
+import { StatusTypes, Transaction } from "@/modules/payment/domain";
+import { TransactionGatewayInterface } from "@/modules/payment/gateway";
 import ProcessPaymentUsecase from "./process-payment.usecase";
 
 class TransactionRepository implements TransactionGatewayInterface {

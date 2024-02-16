@@ -1,6 +1,6 @@
-import { StatusTypes } from "../domain";
-import { TransactionRepository } from "../repository";
-import { ProcessPaymentUsecase } from "../usecase/process-payment";
+import { StatusTypes } from "@/modules/payment/domain";
+import { TransactionRepository } from "@/modules/payment/repository";
+import { ProcessPaymentUsecase } from "@/modules/payment/usecase/process-payment";
 import PaymentFacade from "./payment.facade";
 
 const makeSut = () => {

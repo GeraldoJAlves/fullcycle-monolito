@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize-typescript";
-import { TransactionModel } from "../repository";
+import { TransactionModel } from "@/modules/payment/repository";
 import PaymentFacadeFactory from "./facade.factory";
 
 describe("PaymentFacade factory", () => {

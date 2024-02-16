@@ -1,4 +1,4 @@
-import { ProcessPaymentUsecase } from "../usecase/process-payment";
+import { ProcessPaymentUsecase } from "@/modules/payment/usecase/process-payment";
 import {
   PaymentFacadeInterface,
   ProcessPaymentFacadeInputDTO,

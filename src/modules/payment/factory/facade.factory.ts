@@ -1,6 +1,6 @@
-import { PaymentFacade } from "../facacde";
-import { TransactionRepository } from "../repository";
-import { ProcessPaymentUsecase } from "../usecase/process-payment";
+import { PaymentFacade } from "@/modules/payment/facacde";
+import { TransactionRepository } from "@/modules/payment/repository";
+import { ProcessPaymentUsecase } from "@/modules/payment/usecase/process-payment";
 
 export default class PaymentFacadeFactory {
   static create() {
