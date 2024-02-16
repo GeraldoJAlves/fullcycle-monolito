@@ -2,16 +2,16 @@ import { UsecaseInterface } from "@/modules/@shared/usecase";
 import { InvoiceGatewayInterface } from "@/modules/invoice/gateway";
 import { InvoiceFactory } from "@/modules/invoice/factory";
 import {
-  GenerateInvoiceUsecaseInputDto,
-  GenerateInvoiceUsecaseOutputDto,
+  GenerateInvoiceUsecaseInputDTO,
+  GenerateInvoiceUsecaseOutputDTO,
 } from "./generate-invoice.dto";
 
 export default class GenerateInvoiceUsecase implements UsecaseInterface {
   constructor(private readonly repository: InvoiceGatewayInterface) {}
 
   async execute(
-    input: GenerateInvoiceUsecaseInputDto
-  ): Promise<GenerateInvoiceUsecaseOutputDto> {
+    input: GenerateInvoiceUsecaseInputDTO
+  ): Promise<GenerateInvoiceUsecaseOutputDTO> {
     const invoice = InvoiceFactory.create(input);
 
     await this.repository.save(invoice);

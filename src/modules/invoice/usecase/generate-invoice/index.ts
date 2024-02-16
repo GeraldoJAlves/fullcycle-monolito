@@ -1,11 +1,11 @@
 import {
-  GenerateInvoiceUsecaseInputDto,
-  GenerateInvoiceUsecaseOutputDto,
+  GenerateInvoiceUsecaseInputDTO,
+  GenerateInvoiceUsecaseOutputDTO,
 } from "./generate-invoice.dto";
 import GenerateInvoiceUsecase from "./generate-invoice.usecase";
 
 export {
   GenerateInvoiceUsecase,
-  GenerateInvoiceUsecaseInputDto,
-  GenerateInvoiceUsecaseOutputDto,
+  GenerateInvoiceUsecaseInputDTO,
+  GenerateInvoiceUsecaseOutputDTO,
 };
