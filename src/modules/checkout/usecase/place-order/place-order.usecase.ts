@@ -1,15 +1,15 @@
 import { UsecaseInterface } from "@/modules/@shared/usecase";
 import { ClientAdmFacadeInterface } from "@/modules/client-adm/facade";
-import { StoreCatalogFacadeInterface } from "@/modules/store-catalog/facade";
 import {
   PlaceOrderUsecaseInputDTO,
   PlaceOrderUsecaseOutputDTO,
 } from "./place-order.dto";
+import { ProductAdmFacadeInterface } from "@/modules/product-adm/facade";
 
 export default class PlaceOrderUsecase implements UsecaseInterface {
   constructor(
     private readonly clientAdmFacade: ClientAdmFacadeInterface,
-    private readonly storeCatalogFacade: StoreCatalogFacadeInterface
+    private readonly productAdmFacade: ProductAdmFacadeInterface
   ) {}
 
   async execute(
@@ -21,7 +21,7 @@ export default class PlaceOrderUsecase implements UsecaseInterface {
       throw new Error("Must provide at least one product")
     }
 
-    const products = await this.getStoreCatalogProducts(input.products);
+    await this.validateProductsStock(input.products);
 
     return {
       id: "",
@@ -32,14 +32,12 @@ export default class PlaceOrderUsecase implements UsecaseInterface {
     };
   }
 
-  private async getStoreCatalogProducts(products: { productId: string }[]) {
-    const storeCatalogProducts = [];
-
+  private async validateProductsStock(products: { productId: string }[]) {
     for (const product of products) {
-      storeCatalogProducts.push(
-        await this.storeCatalogFacade.find({ id: product.productId })
-      );
+      const productStock = await this.productAdmFacade.checkStock({ id: product.productId })
+      if (productStock.stock <= 0) {
+        throw new Error(`Product ${productStock.id} out of stock`)
+      }
     }
-    return storeCatalogProducts;
   }
 }
