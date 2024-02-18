@@ -20,13 +20,21 @@ export default class Order extends BaseEntity implements AggregateRoot {
     this.client = props.client;
     this.products = props.products;
     this.status = props.status || "pending";
-    this.validate()
+    this.validate();
   }
 
   private validate() {
     if (this.products.length === 0) {
       throw new Error("Order must have at least one product");
     }
+  }
+
+  approve() {
+    this.status = 'approved'
+  }
+
+  getTotal() {
+    return this.products.reduce((acc, product) => acc + product.getSalesPrice(), 0)
   }
 
   getClient() {
