@@ -1,4 +1,4 @@
-import {StoreCatalogFacade} from "@/modules/store-catalog/facade";
+import { StoreCatalogFacade } from "@/modules/store-catalog/facade";
 import { ProductRepository } from "@/modules/store-catalog/repository";
 import { FindAllProductsUsecase } from "@/modules/store-catalog/usecase/find-all-products";
 import { FindProductUsecase } from "@/modules/store-catalog/usecase/find-product";
