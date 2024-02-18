@@ -1,26 +1,28 @@
 import { ClientAdmFacadeFactory } from "@/modules/client-adm/factory";
 import { StoreCatalogFacadeFactory } from "@/modules/store-catalog/factory";
 import PlaceOrderUsecase from "./place-order.usecase";
-import { ClientAdmFacade } from "@/modules/client-adm/facade";
+import { ClientAdmFacade, ClientAdmFacadeInterface } from "@/modules/client-adm/facade";
 import { StoreCatalogFacade } from "@/modules/store-catalog/facade";
+import { ProductAdmFacadeFactory } from "@/modules/product-adm/factory";
+import { ProductAdmFacade, ProductAdmFacadeInterface } from "@/modules/product-adm/facade";
 
 const makeSut = () => {
   const clientAdmFacade = ClientAdmFacadeFactory.create();
-  const storeCatalogFacade = StoreCatalogFacadeFactory.create();
+  const productAdmFacade = ProductAdmFacadeFactory.create();
 
-  const sut = new PlaceOrderUsecase(clientAdmFacade, storeCatalogFacade);
+  const sut = new PlaceOrderUsecase(clientAdmFacade, productAdmFacade);
 
-  defaultMock(clientAdmFacade, storeCatalogFacade);
+  defaultMock(clientAdmFacade, productAdmFacade);
   return {
     sut,
     clientAdmFacade,
-    storeCatalogFacade,
+    productAdmFacade,
   };
 };
 
 const defaultMock = (
-  clientAdmFacade: ClientAdmFacade,
-  storeCatalogFacade: StoreCatalogFacade
+  clientAdmFacade: ClientAdmFacadeInterface,
+  productAdmFacade: ProductAdmFacadeInterface
 ) => {
   jest.spyOn(clientAdmFacade, "find").mockResolvedValue({
     id: "c2",
@@ -31,11 +33,9 @@ const defaultMock = (
     updatedAt: new Date(),
   });
 
-  jest.spyOn(storeCatalogFacade, "find").mockResolvedValue({
+  jest.spyOn(productAdmFacade, "checkStock").mockResolvedValue({
     id: "p1",
-    name: "ball",
-    description: "red",
-    salesPrice: 10,
+    stock: 1,
   });
 };
 
@@ -88,17 +88,16 @@ describe("PlaceOrder usecase", () => {
     });
   });
 
-  describe("storeCatalogFacade", () => {
-    it("should call StoreCatalogFacade", async () => {
-      const { sut, storeCatalogFacade } = makeSut();
+  describe("productAdmFacade", () => {
+    it("should call ProductAdmFacade", async () => {
+      const { sut, productAdmFacade } = makeSut();
 
-      const storeCatalogFacadeSpy = jest
-        .spyOn(storeCatalogFacade, "find")
-        .mockResolvedValueOnce({
+      const productAdmFacadeSpy = jest
+        .spyOn(productAdmFacade, "checkStock")
+        .mockClear()
+        .mockResolvedValue({
           id: "p1",
-          name: "ball",
-          description: "red",
-          salesPrice: 10,
+          stock: 1
         });
 
       const input = {
@@ -108,21 +107,19 @@ describe("PlaceOrder usecase", () => {
 
       await sut.execute(input);
 
-      expect(storeCatalogFacadeSpy).toHaveBeenCalledTimes(
+      expect(productAdmFacadeSpy).toHaveBeenCalledTimes(
         input.products.length
       );
     });
 
     it("should throw when an empty list of products is provided", async () => {
-      const { sut, storeCatalogFacade } = makeSut();
+      const { sut, productAdmFacade } = makeSut();
 
-      const storeCatalogFacadeSpy = jest
-        .spyOn(storeCatalogFacade, "find")
+      const productAdmFacadeSpy = jest
+        .spyOn(productAdmFacade, "checkStock")
         .mockResolvedValueOnce({
           id: "p1",
-          name: "ball",
-          description: "red",
-          salesPrice: 10,
+          stock: 1
         });
 
       const input = {
@@ -133,7 +130,28 @@ describe("PlaceOrder usecase", () => {
       await expect(async () => {
         await sut.execute(input);
       }).rejects.toThrow(new Error("Must provide at least one product"));
-      expect(storeCatalogFacadeSpy).toHaveBeenCalledTimes(0);
+      expect(productAdmFacadeSpy).toHaveBeenCalledTimes(0);
+    });
+
+    it("should throw when a product is out of stock", async () => {
+      const { sut, productAdmFacade } = makeSut();
+
+      const productAdmFacadeSpy = jest
+        .spyOn(productAdmFacade, "checkStock")
+        .mockResolvedValueOnce({
+          id: "p1",
+          stock: 0
+        });
+
+      const input = {
+        clientId: "",
+        products: [{id: "p1"}],
+      };
+
+      await expect(async () => {
+        await sut.execute(input);
+      }).rejects.toThrow(new Error("Product p1 out of stock"));
+      expect(productAdmFacadeSpy).toHaveBeenCalledTimes(1);
     });
   });
 });
