@@ -50,8 +50,7 @@ export default class PlaceOrderUsecase implements UsecaseInterface {
       throw new Error("Payment was not approved");
     }
 
-    const document = `order ${order.getId().getValue()}`
-    const invoice = await this.generateInvoice(client, products, document);
+    const invoice = await this.generateInvoice(client, products);
 
     return {
       id: order.getId().getValue(),
@@ -114,13 +113,12 @@ export default class PlaceOrderUsecase implements UsecaseInterface {
 
   private async generateInvoice(
     client: Client,
-    products: Product[],
-    document: string
+    products: Product[]
 
   ): Promise<GenerateInvoiceFacadeOutputDTO> {
     const invoiceInput = {
       name: client.getName(),
-      document,
+      document: '',
       street: client.getAddress().getStreet(),
       number: client.getAddress().getNumber(),
       complement: client.getAddress().getComplement(),
