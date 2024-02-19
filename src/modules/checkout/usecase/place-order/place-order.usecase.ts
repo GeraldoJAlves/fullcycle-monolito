@@ -2,11 +2,12 @@ import { UsecaseInterface } from "@/modules/@shared/usecase";
 import { ClientAdmFacadeInterface } from "@/modules/client-adm/facade";
 import { ProductAdmFacadeInterface } from "@/modules/product-adm/facade";
 import { StoreCatalogFacadeInterface } from "@/modules/store-catalog/facade";
-import { OrderFactory } from "@/modules/checkout/factory"
+import { Client, Order, Product } from "@/modules/checkout/domain";
 import {
   PlaceOrderUsecaseInputDTO,
   PlaceOrderUsecaseOutputDTO,
 } from "./place-order.dto";
+import { Id } from "@/modules/@shared/domain/value-object";
 
 export default class PlaceOrderUsecase implements UsecaseInterface {
   constructor(
@@ -18,7 +19,7 @@ export default class PlaceOrderUsecase implements UsecaseInterface {
   async execute(
     input: PlaceOrderUsecaseInputDTO
   ): Promise<PlaceOrderUsecaseOutputDTO> {
-    const client = await this.clientAdmFacade.find({ id: input.clientId });
+    const client = await this.getClient(input.clientId);
 
     if (input.products.length === 0) {
       throw new Error("Must provide at least one product");
@@ -26,21 +27,11 @@ export default class PlaceOrderUsecase implements UsecaseInterface {
 
     await this.validateProductsStock(input.products);
 
-    const products = await this.getStoreCatalogProducts(input.products);
+    const products = await this.getProducts(input.products);
 
-    const order = OrderFactory.create({
-      client: {
-        id: client.id,
-        name: client.name,
-        email: client.email,
-        address: client.address,
-      },
-      products: products.map((product) => ({
-        id: product.id,
-        name: product.name,
-        description: product.description,
-        salesPrice: product.salesPrice,
-      })),
+    const order = new Order({
+      client,
+      products,
     });
 
     return {
@@ -52,7 +43,9 @@ export default class PlaceOrderUsecase implements UsecaseInterface {
     };
   }
 
-  private async validateProductsStock(products: { productId: string }[]) {
+  private async validateProductsStock(
+    products: { productId: string }[]
+  ): Promise<void> {
     for (const product of products) {
       const productStock = await this.productAdmFacade.checkStock({
         id: product.productId,
@@ -63,13 +56,32 @@ export default class PlaceOrderUsecase implements UsecaseInterface {
     }
   }
 
-  private async getStoreCatalogProducts(products: { productId: string }[]) {
-    const storeCatalogProducts = [];
+  private async getClient(id: string) {
+    const client = await this.clientAdmFacade.find({ id });
+    return new Client({
+      id: new Id(client.id),
+      name: client.name,
+      email: client.email,
+      address: client.address,
+    });
+  }
+
+  private async getProducts(
+    products: { productId: string }[]
+  ): Promise<Product[]> {
+    const storeCatalogProducts: Product[] = [];
     for (const product of products) {
       const productStock = await this.storeCatalogFacade.find({
         id: product.productId,
       });
-      storeCatalogProducts.push(productStock);
+      storeCatalogProducts.push(
+        new Product({
+          id: new Id(productStock.id),
+          name: productStock.name,
+          description: productStock.description,
+          salesPrice: productStock.salesPrice,
+        })
+      );
     }
     return storeCatalogProducts;
   }
