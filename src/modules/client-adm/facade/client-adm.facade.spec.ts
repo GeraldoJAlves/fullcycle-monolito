@@ -29,7 +29,14 @@ describe("ClientAdm facade", () => {
         id: "1",
         name: "Gerard",
         email: "email@email.com",
-        address: "no street",
+        address: {
+          street: "street 2",
+          number: "30",
+          complement: "none",
+          city: "city M",
+          state: "WC",
+          zipCode: "999-99"
+        },
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -55,7 +62,14 @@ describe("ClientAdm facade", () => {
         id: "1",
         name: "Gerard",
         email: "email@email.com",
-        address: "no street",
+        address: {
+          street: "street 2",
+          number: "30",
+          complement: "none",
+          city: "city M",
+          state: "WC",
+          zipCode: "999-99"
+        },
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -82,7 +96,14 @@ describe("ClientAdm facade", () => {
         id: "1",
         name: "Gerard",
         email: "email@email.com",
-        address: "no street",
+        address: {
+          street: "street 2",
+          number: "30",
+          complement: "none",
+          city: "city M",
+          state: "WC",
+          zipCode: "999-99"
+        },
         createdAt: new Date(),
         updatedAt: new Date()
       };

@@ -2,6 +2,15 @@ import { Sequelize } from "sequelize-typescript";
 import { ClientModel } from "@/modules/client-adm/repository";
 import ClientAdmFacadeFactory from "./facade.factory";
 
+const defaultInputAddress = {
+  street: "street 2",
+  number: "30",
+  complement: "none",
+  city: "city M",
+  state: "WC",
+  zipCode: "999-99"
+}
+
 describe("ClientAdmFacade factory", () => {
   let sequelize: Sequelize;
 
@@ -24,7 +33,7 @@ describe("ClientAdmFacade factory", () => {
     const client = {
       name: "Alexander",
       email: "aa@email.com",
-      address: "street 0, city C",
+      address: defaultInputAddress,
     };
 
     const sut = ClientAdmFacadeFactory.create();
@@ -37,14 +46,20 @@ describe("ClientAdmFacade factory", () => {
 
     expect(clientDb?.id).toBeDefined();
     expect(output.id).toBe(clientDb?.id);
+    expect(output.address.street).toEqual(clientDb?.street)
+    expect(output.address.number).toEqual(clientDb?.number)
+    expect(output.address.complement).toEqual(clientDb?.complement)
+    expect(output.address.city).toEqual(clientDb?.city)
+    expect(output.address.state).toEqual(clientDb?.state)
+    expect(output.address.zipCode).toEqual(clientDb?.zipCode)
   });
 
   it("should find a client", async () => {
     const clientProps = {
+      ...defaultInputAddress,
       id: "1",
       name: "Alexander",
       email: "aa@email.com",
-      address: "street 0, city C",
       createdAt: new Date(),
       updatedAt: new Date("2020-09-01 04:00:00"),
     };
@@ -57,7 +72,7 @@ describe("ClientAdmFacade factory", () => {
     expect(client.id).toBe(clientProps.id);
     expect(client.name).toBe(clientProps.name);
     expect(client.email).toBe(clientProps.email);
-    expect(client.address).toBe(clientProps.address);
+    expect(client.address).toEqual(defaultInputAddress);
     expect(client.createdAt).toEqual(clientProps.createdAt);
     expect(client.updatedAt).toEqual(clientProps.updatedAt);
   });

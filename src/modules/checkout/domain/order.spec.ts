@@ -1,4 +1,4 @@
-import { Id } from "@/modules/@shared/domain/value-object";
+import { Address, Id } from "@/modules/@shared/domain/value-object";
 import Client from "./client.entity";
 import Order from "./order.entity";
 import Product from "./product.entity";
@@ -8,7 +8,14 @@ describe("Order entity", () => {
     const client = new Client({
       name: "John",
       email: "email@email.com",
-      address: "street 1, California",
+      address: new Address(
+        "street 1",
+        "1",
+        "",
+        "city A",
+        "UC",
+        "999999"
+      ),
     });
 
     const products = [
@@ -34,7 +41,14 @@ describe("Order entity", () => {
     const client = new Client({
       name: "John",
       email: "email@email.com",
-      address: "street 1, California",
+      address: new Address(
+        "street 1",
+        "1",
+        "",
+        "city A",
+        "UC",
+        "999999"
+      ),
     });
 
     const products = [
@@ -58,7 +72,14 @@ describe("Order entity", () => {
     const client = new Client({
       name: "John",
       email: "email@email.com",
-      address: "street 1, California",
+      address: new Address(
+        "street 1",
+        "1",
+        "",
+        "city A",
+        "UC",
+        "999999"
+      ),
     });
 
     const input = {

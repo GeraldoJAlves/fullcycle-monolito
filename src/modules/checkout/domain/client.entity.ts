@@ -1,17 +1,17 @@
 import { AggregateRoot, BaseEntity } from "@/modules/@shared/domain/entity";
-import { Id } from "@/modules/@shared/domain/value-object";
+import { Address, Id } from "@/modules/@shared/domain/value-object";
 
 type ClientProps = {
   id?: Id;
   name: string;
   email: string;
-  address: string;
+  address: Address;
 };
 
 export default class Client extends BaseEntity implements AggregateRoot {
   private name: string;
   private email: string;
-  private address: string;
+  private address: Address;
 
   constructor(props: ClientProps) {
     super(props.id);

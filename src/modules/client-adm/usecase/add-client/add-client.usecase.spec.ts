@@ -12,6 +12,15 @@ class ClientRepository implements ClientGatewayInterface {
   }
 }
 
+const defaultInputAddress = {
+  street: "street 2",
+  number: "30",
+  complement: "none",
+  city: "city M",
+  state: "WC",
+  zipCode: "999-99"
+}
+
 describe("AddClient usecase", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -24,7 +33,7 @@ describe("AddClient usecase", () => {
     const input = {
       name: "tony",
       email: "tony@email.com",
-      address: "main street, city B",
+      address: defaultInputAddress,
     };
 
     const repositorySpy = jest.spyOn(repository, "add").mockResolvedValueOnce();
@@ -43,7 +52,7 @@ describe("AddClient usecase", () => {
     const input = {
       name: "tony",
       email: "tony@email.com",
-      address: "main street, city B",
+      address: defaultInputAddress,
     };
 
     jest.spyOn(repository, "add").mockResolvedValueOnce();
@@ -53,7 +62,7 @@ describe("AddClient usecase", () => {
     expect(response.id).toBeDefined();
     expect(response.name).toBe(input.name);
     expect(response.email).toBe(input.email);
-    expect(response.address).toBe(input.address);
+    expect(response.address).toEqual(defaultInputAddress);
     expect(response.createdAt).toBeDefined();
     expect(response.updatedAt).toBeDefined();
   });

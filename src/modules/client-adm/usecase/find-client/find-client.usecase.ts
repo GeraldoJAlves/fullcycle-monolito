@@ -11,7 +11,14 @@ export default class FindClientUsecase {
       id: client.getId().getValue(),
       name: client.getName(),
       email: client.getEmail(),
-      address: client.getAddress(),
+      address: {
+        street: client.getAddress().getStreet(),
+        number: client.getAddress().getNumber(),
+        complement: client.getAddress().getComplement(),
+        city: client.getAddress().getCity(),
+        state: client.getAddress().getState(),
+        zipCode: client.getAddress().getZipCode(),
+      },
       createdAt: client.getCreatedAt(),
       updatedAt: client.getUpdatedAt()
     }

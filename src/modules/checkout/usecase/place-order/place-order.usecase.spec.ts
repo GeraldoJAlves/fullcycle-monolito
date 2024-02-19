@@ -1,41 +1,66 @@
 import { ClientAdmFacadeFactory } from "@/modules/client-adm/factory";
-import { StoreCatalogFacadeFactory } from "@/modules/store-catalog/factory";
 import { ClientAdmFacadeInterface } from "@/modules/client-adm/facade";
+import { StoreCatalogFacadeFactory } from "@/modules/store-catalog/factory";
 import { StoreCatalogFacadeInterface } from "@/modules/store-catalog/facade";
 import { ProductAdmFacadeFactory } from "@/modules/product-adm/factory";
 import { ProductAdmFacadeInterface } from "@/modules/product-adm/facade";
+import { InvoiceFacadeFactory } from "@/modules/invoice/factory";
+import { InvoiceFacadeInterface } from "@/modules/invoice/facade";
+import { PaymentFacadeFactory } from "@/modules/payment/factory";
 import PlaceOrderUsecase from "./place-order.usecase";
+import { PaymentFacadeInterface } from "@/modules/payment/facade";
 
 const makeSut = () => {
   const clientAdmFacade = ClientAdmFacadeFactory.create();
   const productAdmFacade = ProductAdmFacadeFactory.create();
   const storeCatalogFacade = StoreCatalogFacadeFactory.create();
+  const invoiceFacade = InvoiceFacadeFactory.create();
+  const paymentFacade = PaymentFacadeFactory.create();
 
   const sut = new PlaceOrderUsecase(
     clientAdmFacade,
     productAdmFacade,
-    storeCatalogFacade
+    storeCatalogFacade,
+    invoiceFacade,
+    paymentFacade
   );
 
-  defaultMock(clientAdmFacade, productAdmFacade, storeCatalogFacade);
+  defaultMock(
+    clientAdmFacade,
+    productAdmFacade,
+    storeCatalogFacade,
+    invoiceFacade,
+    paymentFacade
+  );
   return {
     sut,
     clientAdmFacade,
     productAdmFacade,
-    storeCatalogFacade
+    storeCatalogFacade,
+    invoiceFacade,
+    paymentFacade,
   };
 };
 
 const defaultMock = (
   clientAdmFacade: ClientAdmFacadeInterface,
   productAdmFacade: ProductAdmFacadeInterface,
-  storeCatalogFacade: StoreCatalogFacadeInterface
+  storeCatalogFacade: StoreCatalogFacadeInterface,
+  invoiceFacade: InvoiceFacadeInterface,
+  paymentFacade: PaymentFacadeInterface
 ) => {
   jest.spyOn(clientAdmFacade, "find").mockResolvedValue({
     id: "c2",
     name: "john",
     email: "email@email 1",
-    address: "street 1",
+    address: {
+      street: "street 2",
+      number: "30",
+      complement: "none",
+      city: "city M",
+      state: "WC",
+      zipCode: "999-99"
+    },
     createdAt: new Date(),
     updatedAt: new Date(),
   });
@@ -50,6 +75,35 @@ const defaultMock = (
     name: "ball",
     description: "red",
     salesPrice: 6.99,
+  });
+
+  jest.spyOn(invoiceFacade, "generate").mockResolvedValue({
+    id: "i1",
+    name: "",
+    document: "",
+    street: "",
+    number: "",
+    complement: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    items: [
+      {
+        id: "",
+        name: "",
+        price: 10,
+      },
+    ],
+    total: 10,
+  });
+
+  jest.spyOn(paymentFacade, "process").mockResolvedValue({
+    transactionId: "",
+    orderId: "",
+    amount: 110,
+    status: "approved",
+    createdAt: new Date(),
+    updatedAt: new Date(),
   });
 };
 
@@ -69,7 +123,14 @@ describe("PlaceOrder usecase", () => {
           id: "c2",
           name: "john",
           email: "email@email 1",
-          address: "street 1",
+          address: {
+            street: "street 2",
+            number: "30",
+            complement: "none",
+            city: "city M",
+            state: "WC",
+            zipCode: "999-99"
+          },
           createdAt: new Date(),
           updatedAt: new Date(),
         });
@@ -167,7 +228,6 @@ describe("PlaceOrder usecase", () => {
     });
   });
 
-
   describe("storeCatalogFacade", () => {
     it("should call StoreCatalogFacade", async () => {
       const { sut, storeCatalogFacade } = makeSut();
@@ -179,7 +239,7 @@ describe("PlaceOrder usecase", () => {
           id: "p1",
           name: "ball",
           description: "red",
-          salesPrice: 6.99
+          salesPrice: 6.99,
         });
 
       const input = {

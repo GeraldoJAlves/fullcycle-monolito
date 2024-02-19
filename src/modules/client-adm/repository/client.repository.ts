@@ -1,4 +1,4 @@
-import { Id } from "@/modules/@shared/domain/value-object";
+import { Address, Id } from "@/modules/@shared/domain/value-object";
 import { Client } from "@/modules/client-adm/domain";
 import { ClientGatewayInterface } from "@/modules/client-adm/gateway";
 import ClientModel from "./client.model";
@@ -9,7 +9,12 @@ export default class ClientRepository implements ClientGatewayInterface {
       id: client.getId().getValue(),
       name: client.getName(),
       email: client.getEmail(),
-      address: client.getAddress(),
+      street: client.getAddress().getStreet(),
+      number: client.getAddress().getNumber(),
+      complement: client.getAddress().getComplement(),
+      city: client.getAddress().getCity(),
+      state: client.getAddress().getState(),
+      zipCode: client.getAddress().getZipCode(),
       createdAt: client.getCreatedAt(),
       updatedAt: client.getUpdatedAt(),
     });
@@ -26,7 +31,14 @@ export default class ClientRepository implements ClientGatewayInterface {
       id: new Id(client.id),
       name: client.name,
       email: client.email,
-      address: client.address,
+      address: new Address(
+        client.street,
+        client.number,
+        client.complement,
+        client.city,
+        client.state,
+        client.zipCode
+      ),
       createdAt: client.createdAt,
       updatedAt: client.updatedAt,
     });

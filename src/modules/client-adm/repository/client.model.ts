@@ -16,7 +16,22 @@ export default class ClientModel extends Model {
   declare email: string;
 
   @Column({ allowNull: false })
-  declare address: string;
+  declare street: string;
+
+  @Column({ allowNull: false })
+  declare number: string;
+
+  @Column({ allowNull: false })
+  declare complement: string;
+
+  @Column({ allowNull: false })
+  declare city: string;
+
+  @Column({ allowNull: false })
+  declare state: string;
+
+  @Column({ allowNull: false, field: "zip_code" })
+  declare zipCode: string;
 
   @Column({ allowNull: false })
   declare createdAt: Date;
