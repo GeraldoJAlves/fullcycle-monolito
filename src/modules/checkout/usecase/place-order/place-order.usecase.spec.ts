@@ -1,28 +1,35 @@
 import { ClientAdmFacadeFactory } from "@/modules/client-adm/factory";
 import { StoreCatalogFacadeFactory } from "@/modules/store-catalog/factory";
-import PlaceOrderUsecase from "./place-order.usecase";
-import { ClientAdmFacade, ClientAdmFacadeInterface } from "@/modules/client-adm/facade";
-import { StoreCatalogFacade } from "@/modules/store-catalog/facade";
+import { ClientAdmFacadeInterface } from "@/modules/client-adm/facade";
+import { StoreCatalogFacadeInterface } from "@/modules/store-catalog/facade";
 import { ProductAdmFacadeFactory } from "@/modules/product-adm/factory";
-import { ProductAdmFacade, ProductAdmFacadeInterface } from "@/modules/product-adm/facade";
+import { ProductAdmFacadeInterface } from "@/modules/product-adm/facade";
+import PlaceOrderUsecase from "./place-order.usecase";
 
 const makeSut = () => {
   const clientAdmFacade = ClientAdmFacadeFactory.create();
   const productAdmFacade = ProductAdmFacadeFactory.create();
+  const storeCatalogFacade = StoreCatalogFacadeFactory.create();
 
-  const sut = new PlaceOrderUsecase(clientAdmFacade, productAdmFacade);
+  const sut = new PlaceOrderUsecase(
+    clientAdmFacade,
+    productAdmFacade,
+    storeCatalogFacade
+  );
 
-  defaultMock(clientAdmFacade, productAdmFacade);
+  defaultMock(clientAdmFacade, productAdmFacade, storeCatalogFacade);
   return {
     sut,
     clientAdmFacade,
     productAdmFacade,
+    storeCatalogFacade
   };
 };
 
 const defaultMock = (
   clientAdmFacade: ClientAdmFacadeInterface,
-  productAdmFacade: ProductAdmFacadeInterface
+  productAdmFacade: ProductAdmFacadeInterface,
+  storeCatalogFacade: StoreCatalogFacadeInterface
 ) => {
   jest.spyOn(clientAdmFacade, "find").mockResolvedValue({
     id: "c2",
@@ -36,6 +43,13 @@ const defaultMock = (
   jest.spyOn(productAdmFacade, "checkStock").mockResolvedValue({
     id: "p1",
     stock: 1,
+  });
+
+  jest.spyOn(storeCatalogFacade, "find").mockResolvedValue({
+    id: "p1",
+    name: "ball",
+    description: "red",
+    salesPrice: 6.99,
   });
 };
 
@@ -97,7 +111,7 @@ describe("PlaceOrder usecase", () => {
         .mockClear()
         .mockResolvedValue({
           id: "p1",
-          stock: 1
+          stock: 1,
         });
 
       const input = {
@@ -107,9 +121,7 @@ describe("PlaceOrder usecase", () => {
 
       await sut.execute(input);
 
-      expect(productAdmFacadeSpy).toHaveBeenCalledTimes(
-        input.products.length
-      );
+      expect(productAdmFacadeSpy).toHaveBeenCalledTimes(input.products.length);
     });
 
     it("should throw when an empty list of products is provided", async () => {
@@ -119,7 +131,7 @@ describe("PlaceOrder usecase", () => {
         .spyOn(productAdmFacade, "checkStock")
         .mockResolvedValueOnce({
           id: "p1",
-          stock: 1
+          stock: 1,
         });
 
       const input = {
@@ -140,18 +152,62 @@ describe("PlaceOrder usecase", () => {
         .spyOn(productAdmFacade, "checkStock")
         .mockResolvedValueOnce({
           id: "p1",
-          stock: 0
+          stock: 0,
         });
 
       const input = {
         clientId: "",
-        products: [{id: "p1"}],
+        products: [{ productId: "p1" }],
       };
 
       await expect(async () => {
         await sut.execute(input);
       }).rejects.toThrow(new Error("Product p1 out of stock"));
       expect(productAdmFacadeSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+
+  describe("storeCatalogFacade", () => {
+    it("should call StoreCatalogFacade", async () => {
+      const { sut, storeCatalogFacade } = makeSut();
+
+      const storeCatalogFacadeSpy = jest
+        .spyOn(storeCatalogFacade, "find")
+        .mockClear()
+        .mockResolvedValueOnce({
+          id: "p1",
+          name: "ball",
+          description: "red",
+          salesPrice: 6.99
+        });
+
+      const input = {
+        clientId: "c1",
+        products: [{ productId: "1" }, { productId: "2" }],
+      };
+
+      await sut.execute(input);
+
+      expect(storeCatalogFacadeSpy).toHaveBeenCalledTimes(2);
+    });
+
+    it("should throw when product was not found", async () => {
+      const { sut, storeCatalogFacade } = makeSut();
+
+      jest
+        .spyOn(storeCatalogFacade, "find")
+        .mockClear()
+        .mockRejectedValue(new Error("Product not found"));
+
+      const input = {
+        clientId: "",
+        products: [{ productId: "1" }, { productId: "2" }],
+      };
+
+      await expect(async () => {
+        await sut.execute(input);
+      }).rejects.toThrow(new Error("Product not found"));
     });
   });
 });
