@@ -2,7 +2,7 @@ import { Id } from "@/modules/@shared/domain/value-object";
 import { Product, Client, Order } from "@/modules/checkout/domain";
 
 interface OrderFactoryProps {
-  id: string
+  id?: string
   client: {
     id: string,
     name: string,
