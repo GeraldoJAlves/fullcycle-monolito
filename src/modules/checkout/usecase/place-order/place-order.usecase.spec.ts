@@ -59,7 +59,7 @@ const defaultMock = (
       complement: "none",
       city: "city M",
       state: "WC",
-      zipCode: "999-99"
+      zipCode: "999-99",
     },
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -129,7 +129,7 @@ describe("PlaceOrder usecase", () => {
             complement: "none",
             city: "city M",
             state: "WC",
-            zipCode: "999-99"
+            zipCode: "999-99",
           },
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -268,6 +268,120 @@ describe("PlaceOrder usecase", () => {
       await expect(async () => {
         await sut.execute(input);
       }).rejects.toThrow(new Error("Product not found"));
+    });
+  });
+
+  describe("paymentFacade", () => {
+    it("should call PaymentFacade", async () => {
+      const { sut, paymentFacade } = makeSut();
+
+      const paymentFacadeSpy = jest
+        .spyOn(paymentFacade, "process")
+        .mockClear()
+        .mockResolvedValueOnce({
+          transactionId: "",
+          orderId: "",
+          amount: 110,
+          status: "approved",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+
+      const input = {
+        clientId: "c1",
+        products: [{ productId: "1" }, { productId: "2" }],
+      };
+
+      await sut.execute(input);
+
+      expect(paymentFacadeSpy).toHaveBeenCalled();
+    });
+
+    it("should throw when payment was not approved", async () => {
+      const { sut, paymentFacade, invoiceFacade } = makeSut();
+
+      jest
+        .spyOn(paymentFacade, "process")
+        .mockClear()
+        .mockRejectedValue(new Error("Payment was not approved"));
+
+      const invoiceFacadeSpy = jest.spyOn(invoiceFacade, "generate");
+
+      const input = {
+        clientId: "",
+        products: [{ productId: "1" }, { productId: "2" }],
+      };
+
+      await expect(async () => {
+        await sut.execute(input);
+      }).rejects.toThrow(new Error("Payment was not approved"));
+      expect(invoiceFacadeSpy).toHaveBeenCalledTimes(0);
+    });
+  });
+
+  describe("invoiceFacade", () => {
+    it("should call InvoiceFacade", async () => {
+      const { sut, invoiceFacade, storeCatalogFacade } = makeSut();
+
+      const invoiceFacadeSpy = jest
+        .spyOn(invoiceFacade, "generate")
+        .mockClear()
+        .mockResolvedValueOnce({
+          id: "i1",
+          name: "john",
+          document: "",
+          street: "street 1",
+          number: "90",
+          complement: "comp",
+          city: "city A",
+          state: "UI",
+          zipCode: "999",
+          items: [
+            {
+              id: "p1",
+              name: "ball",
+              price: 10,
+            },
+          ],
+          total: 10,
+        });
+      jest.spyOn(storeCatalogFacade, "find").mockClear().mockResolvedValue({
+        id: "p1",
+        name: "ball",
+        description: "red",
+        salesPrice: 10,
+      });
+
+      const input = {
+        clientId: "c1",
+        products: [{ productId: "p1" }],
+      };
+
+      const output = await sut.execute(input);
+
+      expect(invoiceFacadeSpy).toHaveBeenCalled();
+      expect(output.id).toBeDefined();
+      expect(output.invoiceId).toBe("i1");
+      expect(output.products).toEqual([{ productId: "p1" }]);
+      expect(output.total).toEqual(10);
+      expect(output.status).toEqual('approved');
+    });
+
+    it("should throw if invoice throws", async () => {
+      const { sut, invoiceFacade } = makeSut();
+
+      jest.spyOn(invoiceFacade, "generate")
+        .mockClear()
+        .mockRejectedValue(new Error("Invoice error"));
+
+      const input = {
+        clientId: "",
+        products: [{ productId: "1" }, { productId: "2" }],
+      };
+
+      await expect(async () => {
+        await sut.execute(input);
+      }).rejects.toThrow(new Error("Invoice error"));
     });
   });
 });
