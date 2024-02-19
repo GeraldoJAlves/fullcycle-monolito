@@ -52,6 +52,8 @@ export default class PlaceOrderUsecase implements UsecaseInterface {
 
     const invoice = await this.generateInvoice(client, products);
 
+    order.approve()
+
     return {
       id: order.getId().getValue(),
       invoiceId: invoice.id,
