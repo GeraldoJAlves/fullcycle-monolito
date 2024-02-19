@@ -1,4 +1,4 @@
-import { PaymentFacade } from "@/modules/payment/facacde";
+import { PaymentFacade } from "@/modules/payment/facade";
 import { TransactionRepository } from "@/modules/payment/repository";
 import { ProcessPaymentUsecase } from "@/modules/payment/usecase/process-payment";
 
