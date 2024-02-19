@@ -1,9 +1,9 @@
 import { Sequelize } from "sequelize-typescript";
+import { Id } from "@/modules/@shared/domain/value-object";
 import { InvoiceFactory } from "@/modules/invoice/factory";
 import InvoiceItemModel from "./invoice-item.model";
 import InvoiceModel from "./invoice.model";
 import InvoiceRepository from "./invoice.repository";
-import { Id } from "@/modules/@shared/domain/value-object";
 
 describe("Invoice repository", () => {
   let sequelize: Sequelize;

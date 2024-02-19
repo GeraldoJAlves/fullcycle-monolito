@@ -1,5 +1,4 @@
-import { Id } from "@/modules/@shared/domain/value-object";
-import { Address } from "@/modules/invoice/value-object";
+import { Id, Address } from "@/modules/@shared/domain/value-object";
 import InvoiceItem from "./invoice-items.enitty";
 import Invoice from "./invoice.entity";
 

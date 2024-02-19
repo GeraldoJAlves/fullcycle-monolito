@@ -1,4 +1,4 @@
-import { ValueObject } from "@/modules/@shared/domain/value-object";
+import ValueObject from "./value-object.interface";
 
 export default class Address implements ValueObject {
   constructor(

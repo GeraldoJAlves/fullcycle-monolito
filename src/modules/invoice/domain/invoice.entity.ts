@@ -1,6 +1,5 @@
 import { AggregateRoot, BaseEntity } from "@/modules/@shared/domain/entity";
-import { Id } from "@/modules/@shared/domain/value-object";
-import { Address } from "@/modules/invoice/value-object";
+import { Id, Address } from "@/modules/@shared/domain/value-object";
 import InvoiceItem from "./invoice-items.enitty";
 
 type InvoiceProps = {

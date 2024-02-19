@@ -1,6 +1,5 @@
-import { Id } from "@/modules/@shared/domain/value-object";
+import { Id, Address} from "@/modules/@shared/domain/value-object";
 import { Invoice, InvoiceItem } from "@/modules/invoice/domain";
-import { Address } from "@/modules/invoice/value-object";
 
 type InvoiceFactoryProps = {
   id?: string;
