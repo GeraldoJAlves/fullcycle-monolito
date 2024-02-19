@@ -8,12 +8,14 @@ import {
   PlaceOrderUsecaseOutputDTO,
 } from "./place-order.dto";
 import { Id } from "@/modules/@shared/domain/value-object";
+import InvoiceFacadeInterface, { GenerateInvoiceFacadeOutputDTO } from "@/modules/invoice/facade/invoice.facade.interface";
 
 export default class PlaceOrderUsecase implements UsecaseInterface {
   constructor(
     private readonly clientAdmFacade: ClientAdmFacadeInterface,
     private readonly productAdmFacade: ProductAdmFacadeInterface,
-    private readonly storeCatalogFacade: StoreCatalogFacadeInterface
+    private readonly storeCatalogFacade: StoreCatalogFacadeInterface,
+    private readonly invoiceFacade: InvoiceFacadeInterface
   ) {}
 
   async execute(
@@ -28,6 +30,8 @@ export default class PlaceOrderUsecase implements UsecaseInterface {
     await this.validateProductsStock(input.products);
 
     const products = await this.getProducts(input.products);
+
+    const invoice = await this.generateInvoice(client, products)
 
     const order = new Order({
       client,
@@ -84,5 +88,24 @@ export default class PlaceOrderUsecase implements UsecaseInterface {
       );
     }
     return storeCatalogProducts;
+  }
+
+  private async generateInvoice(client: Client, products: Product[]): Promise<GenerateInvoiceFacadeOutputDTO> {
+    const invoiceInput = {
+      name: client.getName(),
+      document: "doc 1",
+      street: client.getAddress(),
+      number: "1",
+      complement: "",
+      city: "city",
+      state: "",
+      zipCode: "",
+      items: products.map((product) => ({
+        id: product.getId().getValue(),
+        name: product.getName(),
+        price: product.getSalesPrice(),
+      })),
+    };
+    return await this.invoiceFacade.generate(invoiceInput);
   }
 }

@@ -1,7 +1,12 @@
 import InvoiceFacade from "./invoice.facade";
-import {
+import InvoiceFacadeInterface, {
   FindInvoiceFacadeInputDTO,
   FindInvoiceFacadeOutputDTO,
 } from "./invoice.facade.interface";
 
-export { FindInvoiceFacadeInputDTO, FindInvoiceFacadeOutputDTO, InvoiceFacade };
+export {
+  FindInvoiceFacadeInputDTO,
+  FindInvoiceFacadeOutputDTO,
+  InvoiceFacade,
+  InvoiceFacadeInterface,
+};
