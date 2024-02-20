@@ -8,10 +8,10 @@ export const productRoute = Router();
 productRoute.get("/:id/check-stock", async (req, res) => {
   try {
     const usecase = new CheckStockUsecase(new ProductRepository());
-    const products = await usecase.execute({
+    const stock = await usecase.execute({
       id: req.params.id,
     });
-    res.json(products);
+    res.json(stock);
   } catch (err) {
     if (err instanceof Error && err.message.startsWith("Product with id")) {
       return res.status(404).send();
