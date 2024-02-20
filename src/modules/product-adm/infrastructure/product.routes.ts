@@ -20,12 +20,23 @@ productRoute.get("/:id/check-stock", async (req, res) => {
 
 productRoute.post("/", async (req, res) => {
   try {
+    if (!req.body) {
+      return res.status(400).send();
+    }
+
+    const { name, description, purchasePrice, stock } = req.body;
+
+    if (!name || !description || purchasePrice <= 0 || stock <= 0) {
+      return res.status(400).send();
+    }
+
     const usecase = new AddProductUsecase(new ProductRepository());
+
     const productDTO = {
       name: req.body.name,
       description: req.body.description,
       purchasePrice: req.body.purchasePrice,
-      stock: req.body.stock
+      stock: req.body.stock,
     };
     const product = await usecase.execute(productDTO);
     res.status(201).json(product);
