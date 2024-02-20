@@ -1,7 +1,7 @@
-import { app, sequelize } from "@/modules/@shared/infrastructure/express";
 import request from "supertest";
-import { ProductModel } from "../repository/product.model";
-import { Product } from "../domain";
+import { app, sequelize } from "@/modules/@shared/infrastructure/express";
+import { ProductModel } from "@/modules/product-adm/repository/product.model";
+import { Product } from "@/modules/product-adm/domain";
 import { Id } from "@/modules/@shared/domain/value-object";
 
 describe("Product route", () => {
