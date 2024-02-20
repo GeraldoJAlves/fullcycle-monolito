@@ -2,6 +2,7 @@ import { AllowNull, Column, Model, PrimaryKey, Table } from "sequelize-typescrip
 
 @Table({
   tableName: "products",
+  modelName: 'products',
   timestamps: false,
 })
 export default class ProductModel extends Model {
@@ -15,6 +16,6 @@ export default class ProductModel extends Model {
   @Column({ allowNull: false })
   declare description: string;
 
-  @Column({ allowNull: false })
+  @Column({ allowNull: false, field: 'price' })
   declare salesPrice: number;
 }

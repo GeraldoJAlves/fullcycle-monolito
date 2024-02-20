@@ -98,15 +98,15 @@ export default class PlaceOrderUsecase implements UsecaseInterface {
   ): Promise<Product[]> {
     const storeCatalogProducts: Product[] = [];
     for (const product of products) {
-      const productStock = await this.storeCatalogFacade.find({
+      const productCatalog = await this.storeCatalogFacade.find({
         id: product.productId,
       });
       storeCatalogProducts.push(
         new Product({
-          id: new Id(productStock.id),
-          name: productStock.name,
-          description: productStock.description,
-          salesPrice: productStock.salesPrice,
+          id: new Id(productCatalog.id),
+          name: productCatalog.name,
+          description: productCatalog.description,
+          salesPrice: productCatalog.salesPrice,
         })
       );
     }
