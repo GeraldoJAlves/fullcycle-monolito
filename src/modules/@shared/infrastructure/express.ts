@@ -5,6 +5,7 @@ import { productRoute as StoreCatalogRoute } from "@/modules/store-catalog/infra
 import { productRoute as productAdmRoute } from "@/modules/product-adm/infrastructure";
 import { clientRoute } from "@/modules/client-adm/infrastructure";
 import { checkoutRoute } from "@/modules/checkout/infrastructure";
+import { invoiceRoute } from "@/modules/invoice/infrastructure";
 
 import { ProductModel as ProductAdmModel } from "@/modules/product-adm/repository";
 import { ProductModel as ProductStoreCatalogModel } from "@/modules/store-catalog/repository";
@@ -19,6 +20,7 @@ app.use("/product", productAdmRoute);
 app.use("/product", StoreCatalogRoute);
 app.use("/client", clientRoute);
 app.use("/checkout", checkoutRoute);
+app.use("/invoice", invoiceRoute);
 
 export let sequelize: Sequelize;
 
@@ -35,7 +37,7 @@ async function setupDb() {
     OrderModel,
     InvoiceModel,
     InvoiceItemModel,
-    TransactionModel
+    TransactionModel,
   ]);
   await sequelize.sync();
 }

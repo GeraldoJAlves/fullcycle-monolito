@@ -3,7 +3,7 @@ import { app, sequelize } from "@/modules/@shared/infrastructure/express";
 import { ClientModel } from "@/modules/client-adm/repository";
 import { ProductModel } from "@/modules/product-adm/repository";
 
-describe("Product route", () => {
+describe("Checkout route", () => {
   beforeEach(async () => {
     await sequelize.sync({ force: true });
   });
