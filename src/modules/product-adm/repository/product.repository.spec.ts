@@ -1,8 +1,8 @@
 import { Sequelize } from "sequelize-typescript";
-import { ProductModel } from "./product.model";
 import { Id } from "@/modules/@shared/domain/value-object";
 import { Product } from "@/modules/product-adm/domain";
 import ProductRepository from "./product.repository";
+import ProductModel from "./product.model";
 
 describe("Product repository", () => {
   let sequelize: Sequelize;
@@ -70,20 +70,17 @@ describe("Product repository", () => {
 
     const productRepository = new ProductRepository();
 
-    const productOutput = await productRepository.find(product.getId())
+    const productOutput = await productRepository.find(product.getId());
 
-    expect(productOutput).toEqual(product)
+    expect(productOutput).toEqual(product);
   });
 
-
-  it("should return error when product not found", async() => {
-    const id = new Id('Id not found')
+  it("should return error when product not found", async () => {
+    const id = new Id("Id not found");
     const productRepository = new ProductRepository();
 
     await expect(async () => {
-      await productRepository.find(id)
-    }).rejects.toThrow(new Error(`Product with id ${id.getValue()} not found`))
-
-
-  })
+      await productRepository.find(id);
+    }).rejects.toThrow(new Error(`Product with id ${id.getValue()} not found`));
+  });
 });

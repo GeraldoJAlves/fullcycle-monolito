@@ -1,6 +1,6 @@
 import request from "supertest";
 import { app, sequelize } from "@/modules/@shared/infrastructure/express";
-import { ProductModel } from "@/modules/product-adm/repository/product.model";
+import { ProductModel } from "@/modules/product-adm/repository";
 import { Product } from "@/modules/product-adm/domain";
 import { Id } from "@/modules/@shared/domain/value-object";
 

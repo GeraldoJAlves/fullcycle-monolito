@@ -1,10 +1,9 @@
 import { Id } from "@/modules/@shared/domain/value-object";
 import { Product } from "@/modules/product-adm/domain";
 import { ProductGatewayInterface } from "@/modules/product-adm/gateway";
-import { ProductModel } from "./product.model";
+import ProductModel from "./product.model";
 
 export default class ProductRepository implements ProductGatewayInterface {
-
   async add(product: Product) {
     await ProductModel.create({
       id: product.getId().getValue(),
