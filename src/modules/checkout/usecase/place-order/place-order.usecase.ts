@@ -14,6 +14,7 @@ import {
   PlaceOrderUsecaseInputDTO,
   PlaceOrderUsecaseOutputDTO,
 } from "./place-order.dto";
+import { StatusTypes } from "@/modules/payment/domain";
 
 export default class PlaceOrderUsecase implements UsecaseInterface {
   constructor(
@@ -48,7 +49,7 @@ export default class PlaceOrderUsecase implements UsecaseInterface {
       amount: order.getTotal(),
     });
 
-    if (payment.status !== "approved") {
+    if (payment.status !== StatusTypes.APPROVED) {
       throw new Error("Payment was not approved");
     }
 

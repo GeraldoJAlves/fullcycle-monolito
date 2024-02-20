@@ -1,3 +1,4 @@
 import OrderFactory from "./entity.factory";
+import PlaceOrderUsecaseFactory from "./usecase.factory";
 
-export { OrderFactory };
+export { OrderFactory, PlaceOrderUsecaseFactory };

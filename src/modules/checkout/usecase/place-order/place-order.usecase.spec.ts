@@ -11,6 +11,7 @@ import { PaymentFacadeFactory } from "@/modules/payment/factory";
 import { PaymentFacadeInterface } from "@/modules/payment/facade";
 import { OrderGateway } from "@/modules/checkout/gateway";
 import { Client, Order, Product } from "@/modules/checkout/domain";
+import { StatusTypes } from "@/modules/payment/domain";
 import PlaceOrderUsecase from "./place-order.usecase";
 
 class OrderRepository implements OrderGateway {
@@ -115,7 +116,7 @@ const defaultMock = (
     transactionId: "",
     orderId: "",
     amount: 110,
-    status: "approved",
+    status: StatusTypes.APPROVED,
     createdAt: new Date(),
     updatedAt: new Date(),
   });
@@ -298,7 +299,7 @@ describe("PlaceOrder usecase", () => {
           transactionId: "",
           orderId: "",
           amount: 110,
-          status: "approved",
+          status: StatusTypes.APPROVED,
           createdAt: new Date(),
           updatedAt: new Date(),
         });
