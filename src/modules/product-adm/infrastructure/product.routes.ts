@@ -13,6 +13,9 @@ productRoute.get("/:id/check-stock", async (req, res) => {
     });
     res.json(products);
   } catch (err) {
+    if (err instanceof Error && err.message.startsWith("Product with id")) {
+      return res.status(404).send();
+    }
     console.error(err);
     res.status(500).send();
   }
