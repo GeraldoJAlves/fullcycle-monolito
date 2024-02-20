@@ -1,5 +1,8 @@
 import { app, sequelize } from "@/modules/@shared/infrastructure/express";
 import request from "supertest";
+import { ProductModel } from "../repository/product.model";
+import { Product } from "../domain";
+import { Id } from "@/modules/@shared/domain/value-object";
 
 describe("Product route", () => {
   beforeEach(async () => {
@@ -44,6 +47,49 @@ describe("Product route", () => {
         const response = await request(app).post("/product").send(input);
         expect(response.status).toBe(400);
       }
+    });
+  });
+
+  describe("GET /:id/checkstock", () => {
+    it("should return the stock of product", async () => {
+      const productProps = {
+        id: new Id(),
+        name: "Product 1",
+        description: "Product 1 description",
+        purchasePrice: 100,
+        stock: 10,
+      };
+
+      const product = new Product(productProps);
+
+      await ProductModel.create({
+        id: product.getId().getValue(),
+        name: product.getName(),
+        description: product.getDescription(),
+        purchasePrice: product.getPurchasePrice(),
+        stock: product.getStock(),
+        createdAt: product.getCreatedAt(),
+        updatedAt: product.getUpdatedAt(),
+      });
+
+      const response = await request(app)
+        .get(`/product/${product.getId().getValue()}/check-stock`)
+        .send();
+
+      expect(response.status).toBe(200);
+
+      expect(response.body).toEqual({
+        id: product.getId().getValue(),
+        stock: product.getStock(),
+      });
+    });
+
+    it("should return 404 if the product does not exist", async () => {
+      const response = await request(app)
+        .get(`/product/898908908098/check-stock`)
+        .send();
+
+      expect(response.status).toBe(404);
     });
   });
 });
