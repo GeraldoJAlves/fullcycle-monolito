@@ -2,9 +2,10 @@ import { UsecaseInterface } from "@/modules/@shared/usecase";
 import { Address, Id } from "@/modules/@shared/domain/value-object";
 import { ClientAdmFacadeInterface } from "@/modules/client-adm/facade";
 import { ProductAdmFacadeInterface } from "@/modules/product-adm/facade";
+import { PaymentFacadeInterface } from "@/modules/payment/facade";
 import { StoreCatalogFacadeInterface } from "@/modules/store-catalog/facade";
 import { Client, Order, Product } from "@/modules/checkout/domain";
-import { PaymentFacadeInterface } from "@/modules/payment/facade";
+import { OrderGateway } from "@/modules/checkout/gateway";
 import {
   InvoiceFacadeInterface,
   GenerateInvoiceFacadeOutputDTO,
@@ -20,7 +21,8 @@ export default class PlaceOrderUsecase implements UsecaseInterface {
     private readonly productAdmFacade: ProductAdmFacadeInterface,
     private readonly storeCatalogFacade: StoreCatalogFacadeInterface,
     private readonly invoiceFacade: InvoiceFacadeInterface,
-    private readonly paymentFacade: PaymentFacadeInterface
+    private readonly paymentFacade: PaymentFacadeInterface,
+    private readonly orderRepository: OrderGateway
   ) {}
 
   async execute(
@@ -53,6 +55,8 @@ export default class PlaceOrderUsecase implements UsecaseInterface {
     const invoice = await this.generateInvoice(client, products);
 
     order.approve()
+
+    await this.orderRepository.save(order, new Id(invoice.id))
 
     return {
       id: order.getId().getValue(),
