@@ -1,3 +1,4 @@
+import { Address, Id } from "@/modules/@shared/domain/value-object";
 import { ClientAdmFacadeFactory } from "@/modules/client-adm/factory";
 import { ClientAdmFacadeInterface } from "@/modules/client-adm/facade";
 import { StoreCatalogFacadeFactory } from "@/modules/store-catalog/factory";
@@ -7,8 +8,16 @@ import { ProductAdmFacadeInterface } from "@/modules/product-adm/facade";
 import { InvoiceFacadeFactory } from "@/modules/invoice/factory";
 import { InvoiceFacadeInterface } from "@/modules/invoice/facade";
 import { PaymentFacadeFactory } from "@/modules/payment/factory";
-import PlaceOrderUsecase from "./place-order.usecase";
 import { PaymentFacadeInterface } from "@/modules/payment/facade";
+import { OrderGateway } from "@/modules/checkout/gateway";
+import { Client, Order, Product } from "@/modules/checkout/domain";
+import PlaceOrderUsecase from "./place-order.usecase";
+
+class OrderRepository implements OrderGateway {
+  save(order: Order, invoiceId: Id): Promise<Order> {
+    throw new Error("Method not implemented.");
+  }
+}
 
 const makeSut = () => {
   const clientAdmFacade = ClientAdmFacadeFactory.create();
@@ -16,13 +25,15 @@ const makeSut = () => {
   const storeCatalogFacade = StoreCatalogFacadeFactory.create();
   const invoiceFacade = InvoiceFacadeFactory.create();
   const paymentFacade = PaymentFacadeFactory.create();
+  const orderRepository = new OrderRepository();
 
   const sut = new PlaceOrderUsecase(
     clientAdmFacade,
     productAdmFacade,
     storeCatalogFacade,
     invoiceFacade,
-    paymentFacade
+    paymentFacade,
+    orderRepository
   );
 
   defaultMock(
@@ -30,7 +41,8 @@ const makeSut = () => {
     productAdmFacade,
     storeCatalogFacade,
     invoiceFacade,
-    paymentFacade
+    paymentFacade,
+    orderRepository
   );
   return {
     sut,
@@ -39,6 +51,7 @@ const makeSut = () => {
     storeCatalogFacade,
     invoiceFacade,
     paymentFacade,
+    orderRepository,
   };
 };
 
@@ -47,7 +60,8 @@ const defaultMock = (
   productAdmFacade: ProductAdmFacadeInterface,
   storeCatalogFacade: StoreCatalogFacadeInterface,
   invoiceFacade: InvoiceFacadeInterface,
-  paymentFacade: PaymentFacadeInterface
+  paymentFacade: PaymentFacadeInterface,
+  orderRepository: OrderGateway
 ) => {
   jest.spyOn(clientAdmFacade, "find").mockResolvedValue({
     id: "c2",
@@ -105,6 +119,8 @@ const defaultMock = (
     createdAt: new Date(),
     updatedAt: new Date(),
   });
+
+  jest.spyOn(orderRepository, "save").mockImplementation(undefined);
 };
 
 describe("PlaceOrder usecase", () => {
@@ -364,13 +380,14 @@ describe("PlaceOrder usecase", () => {
       expect(output.invoiceId).toBe("i1");
       expect(output.products).toEqual([{ productId: "p1" }]);
       expect(output.total).toEqual(10);
-      expect(output.status).toEqual('approved');
+      expect(output.status).toEqual("approved");
     });
 
     it("should throw if invoice throws", async () => {
       const { sut, invoiceFacade } = makeSut();
 
-      jest.spyOn(invoiceFacade, "generate")
+      jest
+        .spyOn(invoiceFacade, "generate")
         .mockClear()
         .mockRejectedValue(new Error("Invoice error"));
 
@@ -382,6 +399,56 @@ describe("PlaceOrder usecase", () => {
       await expect(async () => {
         await sut.execute(input);
       }).rejects.toThrow(new Error("Invoice error"));
+    });
+  });
+
+  describe("orderRepository", () => {
+    it("should call OrderRepository", async () => {
+      const { sut, orderRepository } = makeSut();
+
+      const client = new Client({
+        name: "John",
+        email: "email@email.com",
+        address: new Address("street 1", "1", "", "city A", "UC", "999999"),
+      });
+
+      const products = [
+        new Product({ name: "p1", description: "blue", salesPrice: 7.66 }),
+      ];
+
+      const order = new Order({ client, products });
+
+      const orderRepositorySpy = jest
+        .spyOn(orderRepository, "save")
+        .mockClear()
+        .mockResolvedValueOnce(order);
+
+      const input = {
+        clientId: "c1",
+        products: [{ productId: "p1" }],
+      };
+
+      await sut.execute(input);
+
+      expect(orderRepositorySpy).toHaveBeenCalled();
+    });
+
+    it("should throw if OrderRepository throws", async () => {
+      const { sut, orderRepository } = makeSut();
+
+      jest
+        .spyOn(orderRepository, "save")
+        .mockClear()
+        .mockRejectedValue(new Error("error to connect"));
+
+      const input = {
+        clientId: "c1",
+        products: [{ productId: "p1" }],
+      };
+
+      expect(async () => {
+        await sut.execute(input);
+      }).rejects.toThrow("error to connect");
     });
   });
 });
