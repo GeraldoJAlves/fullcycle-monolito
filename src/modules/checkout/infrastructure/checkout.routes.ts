@@ -5,9 +5,6 @@ export const checkoutRoute = Router();
 
 checkoutRoute.post("/", async (req, res) => {
   try {
-    if (!req.body) {
-      return res.status(400).send();
-    }
 
     const { clientId, products } = req.body;
 
@@ -24,7 +21,7 @@ checkoutRoute.post("/", async (req, res) => {
     const product = await usecase.execute(orderDTO);
     res.status(201).json(product);
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     res.status(500).send();
   }
 });
