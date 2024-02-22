@@ -1,9 +1,23 @@
 import { Router } from "express";
+import { z } from "zod";
+
 import { ProductRepository } from "@/modules/product-adm/repository";
 import { AddProductUsecase } from "@/modules/product-adm/usecase/add-product";
 import { CheckStockUsecase } from "@/modules/product-adm/usecase/check-stock";
+import { validate } from "@/modules/@shared/infrastructure";
 
 export const productRoute = Router();
+
+const CreateProductSchema = z.object({
+  body: z.object({
+    name: z.string({
+      required_error: "invalid name",
+    }),
+    description: z.string({ required_error: "invalid description" }),
+    purchasePrice: z.number().gt(0),
+    stock: z.number().gt(0),
+  }),
+});
 
 productRoute.get("/:id/check-stock", async (req, res) => {
   try {
@@ -21,7 +35,7 @@ productRoute.get("/:id/check-stock", async (req, res) => {
   }
 });
 
-productRoute.post("/", async (req, res) => {
+productRoute.post("/", validate(CreateProductSchema), async (req, res) => {
   try {
     if (!req.body) {
       return res.status(400).send();
