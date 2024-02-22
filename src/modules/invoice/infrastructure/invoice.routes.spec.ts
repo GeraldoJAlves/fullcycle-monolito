@@ -23,6 +23,8 @@ describe("Invoice route", () => {
         zipCode: "9078",
       });
 
+      expect(clientResponse.status).toBe(201);
+
       const productResponse = await request(app).post("/product").send({
         name: "ball",
         description: "red",
