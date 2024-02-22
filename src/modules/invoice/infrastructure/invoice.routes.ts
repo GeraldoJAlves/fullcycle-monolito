@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { FindInvoiceUsecase } from "../usecase/find-invoice";
-import { InvoiceRepository } from "../repository";
+import { FindInvoiceUsecase } from "@/modules/invoice/usecase/find-invoice";
+import { InvoiceRepository } from "@/modules/invoice/repository";
 
 export const invoiceRoute = Router();
 
