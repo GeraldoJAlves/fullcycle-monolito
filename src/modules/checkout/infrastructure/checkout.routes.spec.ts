@@ -9,7 +9,9 @@ describe("Checkout route", () => {
   });
 
   afterAll(async () => {
-    await sequelize.close();
+    try {
+      await sequelize.close();
+    } catch {}
   });
 
   describe("POST /", () => {
@@ -55,20 +57,52 @@ describe("Checkout route", () => {
     it("should return 400 if an invalid body is provided", async () => {
       const inputs = [
         {},
-        { name: "ball" },
-        { description: "ball" },
-        { stock: 2 },
-        { purchasePrice: 3 },
-        { name: "ball", description: "red", purchasePrice: 0, stock: 10 },
-        { name: "ball", description: "red", purchasePrice: 2, stock: 0 },
-        { name: "ball", description: "red", purchasePrice: 2, stock: -1 },
-        { name: "ball", description: "red", purchasePrice: -1, stock: 10 },
+        { clientId: "2" },
       ];
 
       for (const input of inputs) {
-        const response = await request(app).post("/product").send(input);
+        const response = await request(app).post("/checkout").send(input);
         expect(response.status).toBe(400);
       }
+    });
+
+    it("should return 500 if provide an invalid productId", async () => {
+      const clientProps = {
+        id: "1",
+        name: "Alexander",
+        email: "aa@email.com",
+        street: "street 2",
+        number: "30",
+        complement: "none",
+        city: "city M",
+        state: "WC",
+        zipCode: "999-99",
+        createdAt: new Date(),
+        updatedAt: new Date("2020-09-01 04:00:00"),
+      };
+
+      await ClientModel.create(clientProps);
+
+      const productProps = {
+        id: "p1",
+        name: "Product 1",
+        description: "Product 1 description",
+        purchasePrice: 120,
+        stock: 10,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      await ProductModel.create(productProps);
+
+      const response = await request(app)
+        .post("/checkout")
+        .send({
+          clientId: clientProps.id,
+          products: [{ productId: "" }],
+        });
+
+      expect(response.status).toBe(500);
     });
   });
 });
